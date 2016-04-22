@@ -33,4 +33,4 @@ var glX = centerX / (canvas.width / 2);
 var glY = centerY / (canvas.height / 2);
 ```
 
-最终得到的 (glX, glY) 就是我们真对 OpenGL 坐标系（第三幅图的右侧）的坐标。
+最终得到的 (glX, glY) 就是我们针对 OpenGL 坐标系（第三幅图的右侧）的坐标。
