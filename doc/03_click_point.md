@@ -4,15 +4,15 @@
 
 首先我们获取的，是屏幕坐标；何谓屏幕坐标？即浏览器的可视区域，左上角的点是原点，X 轴指向右侧，Y 轴指向下方。如下图所示：
 
-  ![clientRect](clientRect.png)
+  ![clientRect](img/clientRect.png)
 
 canvas 的坐标与屏幕坐标类似，也是左上角为 (0, 0), 而与屏幕坐标的区别在于，它的原点与屏幕坐标的原点存在着 margin，如下图所示： 
 
-![canvasRect](canvasRect.png)
+![canvasRect](img/canvasRect.png)
 
 最后是 OpenGL 坐标系统，它的原点位于 canvas 中心位置，与 canvas 的不同如下图所示：
 
- ![coordinateTranslate](coordinateTranslate.png)
+ ![coordinateTranslate](img/coordinateTranslate.png)
 
 综上三个坐标系统的关系，我们可以得到如下转换步骤。
 
