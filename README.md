@@ -9,3 +9,4 @@ learn WebGL
 2. init WebGL ([example](01_init_webgl.html))
 3. draw point ([example](02_draw_point.html) | [note](doc/02_draw_point.md))
 4. draw point with a mouse click ([example](03_click_point.html) | [note](doc/03_click_point.md))
+5. draw triangle ([example](04_draw_triangle.html) | [note](doc/04_draw_triangle.md))
