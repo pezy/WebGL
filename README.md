@@ -11,3 +11,4 @@ learn WebGL
 4. draw point with a mouse click ([example](03_click_point.html) | [note](doc/03_click_point.md))
 5. draw triangle ([example](04_draw_triangle.html) | [note](doc/04_draw_triangle.md))
 6. translation, rotation, scaling ([example](05_translation_rotation_scaling.html) | [note](doc/05_translation_rotation_scaling.md))
+7. matrix ([example](06_matrix.html))
