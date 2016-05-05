@@ -14,3 +14,4 @@ learn WebGL
 7. matrix ([example](06_matrix.html))
 8. animation ([example](07_animation.html))
 9. rasterization ([example](08_rasterization.html) | [note](doc/08_rasterization.md))
+10. texture ([example](09_texture.html))
