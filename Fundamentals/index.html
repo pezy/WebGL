@@ -5,10 +5,26 @@
     <meta charset="utf8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Basic canvas</title>
+    <style>
+        html {
+            box-sizing: border-box;
+        }
+        body {
+            background-color:aliceblue;
+            font-family: sans-serif;
+        }
+        canvas {
+            background-color: #fff;
+            border: 1px solid black;
+            width: 800px;
+            height: 600px;
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
-    <canvas id="canvas" height="600" width="800">
+    <canvas id="canvas">
         Your browser doesn't appear to support the
         <code>&lt;canvas&gt;</code> element.
     </canvas>
@@ -16,24 +32,18 @@
 
 </html>
 <script id="2d-vertex-shader" type="notjs">
-    // an attribute will receive data from a buffer
-    attribute vec4 a_position;
+    attribute vec2 a_position;
 
-    // all shaders have a main function
+    uniform mat3 u_matrix;
+
     void main() {
-        // gl_Position is a special variable a vertex shader
-        // is responsible for setting
-        gl_Position = a_position;
+        gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
     }
 </script>
 <script id="2d-fragment-shader" type="notjs">
-    // fragment shaders don't have a default precision so we need
-    // to pick one. mediump is a good default
     precision mediump float;
     
     void main() {
-        // gl_FragColor is a special variable a fragment shader
-        // is responsible for setting
         gl_FragColor = vec4(1, 0, 0.5, 1); // return redish-purple
     }
 </script>
@@ -92,10 +102,20 @@
 
         var program = createProgram(gl, vertexShader, fragmentShader);
         var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
+        var matrixLocation = gl.getUniformLocation(program, "u_matrix");
+        
         var positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-        var positions = [0, 0, 0, 0.5, 0.7, 0];
+        var positions = [0, 0, 
+                        0.5, 0, 
+                        0.5, 6.42, 
+                        6, 0, 
+                        6, 8, 
+                        5.5, 8, 
+                        5.5, 1.58, 
+                        0, 8];
+        var positions2 = [0, 0, 0.5, 0, 2.105, 6.420, 6, 0, 8, 8, 7.5, 8, 5.895, 1.580, 2, 8];
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
         resizeCanvasToDisplaySize(gl.canvas);
@@ -107,9 +127,55 @@
         gl.enableVertexAttribArray(positionBuffer);
         gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
 
+        // compute the matrices
+        var translationMatrix = m3.translation(-2, -2);
+        var scaleMatrix = m3.scaling(0.075, 0.1);
+        var shearMatrix = m3.shear(0.25, 0);
+        var matrix = m3.multiply(scaleMatrix, shearMatrix);
+        matrix = m3.multiply(translationMatrix, matrix);
+        console.log(matrix);
+        gl.uniformMatrix3fv(matrixLocation, false, matrix);
+
         // draw
-        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        gl.drawArrays(gl.LINE_LOOP, 0, 8);
     }
+
+    var m3 = {
+        shear: function(sx, sy) {
+            return [
+                1, sy, 0,
+                sx, 1, 0,
+                0, 0, 1,
+            ];
+        },
+        scaling: function(sx, sy) {
+            return [
+                sx, 0, 0,
+                0, sy, 0,
+                0, 0, 1,
+            ];
+        },
+        translation: function(tx, ty) {
+            return [
+                1, 0, 0,
+                0, 1, 0,
+                tx, ty, 1,
+            ];
+        },
+        multiply: function(a, b) {
+            return [
+                a[0] * b[0] + a[1] * b[3] + a[2] * b[6],
+                a[0] * b[1] + a[1] * b[4] + a[2] * b[7],
+                a[0] * b[2] + a[1] * b[5] + a[2] * b[8],
+                a[3] * b[0] + a[4] * b[3] + a[5] * b[6],
+                a[3] * b[1] + a[4] * b[4] + a[5] * b[7],
+                a[3] * b[2] + a[4] * b[5] + a[5] * b[8],
+                a[6] * b[0] + a[7] * b[3] + a[8] * b[6],
+                a[6] * b[1] + a[7] * b[4] + a[8] * b[7],
+                a[6] * b[2] + a[7] * b[5] + a[8] * b[8],
+            ];
+        }
+    };
 
     main();
 </script>
